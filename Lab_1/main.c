@@ -630,24 +630,17 @@ struct BigSize Clear(struct BigSize Number)
 	return Number;
 }
 
-struct BigSize Allocate(struct BigSize Number, unsigned int Size)
-{
-	Number.Number = (unsigned int *)malloc(Size * sizeof(unsigned int));
-	return Number;
-}
-
 struct BigSize Zero(struct BigSize Number, unsigned int Size)
 {
 	memset(Number.Number, 0, Size * sizeof(unsigned int));
 	return Number;
 }
 
-struct BigSize Normalize(struct BigSize Number)
+struct BigSize Allocate(struct BigSize Number, unsigned int Size)
 {
-	unsigned long long i = Number.Count - 1;
-
-	while ((i > 0) && (Number.Number[i] == 0)) i--;
-	Number.Count = i + 1;
+	Number.Number = (unsigned int *)malloc(Size * sizeof(unsigned int));
+	Number.Count = Size;
+	Number = Zero(Number, Number.Count);
 	return Number;
 }
 
@@ -828,9 +821,9 @@ int main(int argc, const char * argv[])
 	if (binary == 1) WriteBinFile(res, resultLongNumFile);
 	else WriteTextFile(res, resultLongNumFileName);
 
-	free(a.Number);
-	free(b.Number);
-	free(res.Number);
+	a=Clear(a);
+	b=Clear(b);
+	c=Clear(c);
 
 	return 0;
 }
